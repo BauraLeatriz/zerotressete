@@ -9,6 +9,7 @@ import Tech from "./pages/Tech";
 import Dev from "./pages/Dev";
 import Garage from "./pages/Garage";
 import Admin from "./pages/Admin";
+import { Analytics } from "@vercel/analytics/react";
 
 function Router() {
   return (
@@ -31,6 +32,7 @@ function App() {
         <TooltipProvider>
           <Toaster />
           <Router />
+          <Analytics />
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>
