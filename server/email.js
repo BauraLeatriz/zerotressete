@@ -20,7 +20,7 @@ export async function sendScheduleConfirmation(email, data) {
     if (!client) return { success: false, reason: "No API key" };
 
     const result = await client.emails.send({
-      from: "zerotressete@resend.dev",
+      from: "noreply@zerotressete.com",
       to: email,
       subject: "Agendamento recebido - zerotressete tech",
       html: `
@@ -60,7 +60,7 @@ export async function sendScheduleNotification(ownerEmail, data) {
     if (!client) return { success: false, reason: "No API key" };
 
     const result = await client.emails.send({
-      from: "zerotressete@resend.dev",
+      from: "noreply@zerotressete.com",
       to: ownerEmail,
       subject: `🔧 Nova solicitação de agendamento - ${data.device}`,
       html: `
