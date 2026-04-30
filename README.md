@@ -107,7 +107,7 @@ NODE_ENV=development
 **Laura Beatriz (Baura)** — dev em formação, Minas Gerais 🌿
 
 - GitHub: [@BauraLeatriz](https://github.com/BauraLeatriz)
-- Instagram: [@zerotressete](https://instagram.com/zerotressete)
+- Instagram: [@zerotressete](https://instagram.com/zer0tr3sse7e)
 
 ---
 

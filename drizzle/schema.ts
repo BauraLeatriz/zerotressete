@@ -28,7 +28,7 @@ export type InsertUser = typeof users.$inferInsert;
 export const schedules = mysqlTable("schedules", {
   id: int("id").autoincrement().primaryKey(),
   name: varchar("name", { length: 255 }).notNull(),
-  email: varchar("email", { length: 320 }).notNull(),
+  email: varchar("email", { length: 320 }),
   phone: varchar("phone", { length: 20 }),
   device: varchar("device", { length: 255 }).notNull(),
   problem: text("problem").notNull(),
