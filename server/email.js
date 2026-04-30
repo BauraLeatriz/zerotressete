@@ -1,26 +1,25 @@
 import { Resend } from "resend";
-import { ENV } from "./_core/env";
+import { ENV } from "./_core/env.js";
 
-let resend: Resend | null = null;
+let resend = null;
 
-function getResend(): Resend {
+function getResend() {
   if (!resend) {
     if (!ENV.resendApiKey) {
-      throw new Error("RESEND_API_KEY não configurada. Configure a chave no Manus Secrets.");
+      console.warn("[Email] RESEND_API_KEY não configurada. E-mails não serão enviados.");
+      return null;
     }
     resend = new Resend(ENV.resendApiKey);
   }
   return resend;
 }
 
-export async function sendScheduleConfirmation(email: string, data: {
-  name: string;
-  device: string;
-  problem: string;
-  preferredDate?: string;
-}) {
+export async function sendScheduleConfirmation(email, data) {
   try {
-    const result = await getResend().emails.send({
+    const client = getResend();
+    if (!client) return { success: false, reason: "No API key" };
+
+    const result = await client.emails.send({
       from: "zerotressete@resend.dev",
       to: email,
       subject: "Agendamento recebido - zerotressete tech",
@@ -49,21 +48,18 @@ export async function sendScheduleConfirmation(email: string, data: {
 
     return result;
   } catch (error) {
-    console.error("Erro ao enviar e-mail de confirmação:", error);
-    throw error;
+    console.error("[Email] Erro ao enviar e-mail de confirmação:", error);
+    // Não vamos lançar o erro adiante para não quebrar a inserção no BD
+    return { success: false, error };
   }
 }
 
-export async function sendScheduleNotification(ownerEmail: string, data: {
-  name: string;
-  email: string;
-  phone?: string;
-  device: string;
-  problem: string;
-  preferredDate?: string;
-}) {
+export async function sendScheduleNotification(ownerEmail, data) {
   try {
-    const result = await getResend().emails.send({
+    const client = getResend();
+    if (!client) return { success: false, reason: "No API key" };
+
+    const result = await client.emails.send({
       from: "zerotressete@resend.dev",
       to: ownerEmail,
       subject: `🔧 Nova solicitação de agendamento - ${data.device}`,
@@ -98,7 +94,8 @@ export async function sendScheduleNotification(ownerEmail: string, data: {
 
     return result;
   } catch (error) {
-    console.error("Erro ao enviar notificação ao dono:", error);
-    throw error;
+    console.error("[Email] Erro ao enviar notificação ao dono:", error);
+    // Não vamos lançar o erro adiante
+    return { success: false, error };
   }
 }

@@ -5,12 +5,12 @@ import { createServer } from "http";
 import net from "net";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import { registerOAuthRoutes } from "./oauth";
-import { appRouter } from "../routers";
+import { appRouter } from "../routers.js";
 import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
 
-function isPortAvailable(port: number): Promise<boolean> {
-  return new Promise(resolve => {
+function isPortAvailable(port) {
+  return new Promise((resolve) => {
     const server = net.createServer();
     server.listen(port, () => {
       server.close(() => resolve(true));
@@ -19,7 +19,7 @@ function isPortAvailable(port: number): Promise<boolean> {
   });
 }
 
-async function findAvailablePort(startPort: number = 3000): Promise<number> {
+async function findAvailablePort(startPort = 3000) {
   for (let port = startPort; port < startPort + 20; port++) {
     if (await isPortAvailable(port)) {
       return port;
@@ -32,7 +32,6 @@ async function startServer() {
   const app = express();
   const server = createServer(app);
 
-  // CORS — permite requisições do Vercel e do domínio próprio
   app.use(
     cors({
       origin: [
@@ -45,14 +44,11 @@ async function startServer() {
     })
   );
 
-  // Configure body parser with larger size limit for file uploads
   app.use(express.json({ limit: "50mb" }));
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
-  // OAuth callback under /api/oauth/callback
   registerOAuthRoutes(app);
 
-  // tRPC API
   app.use(
     "/api/trpc",
     createExpressMiddleware({
@@ -61,7 +57,6 @@ async function startServer() {
     })
   );
 
-  // development mode uses Vite, production mode uses static files
   if (process.env.NODE_ENV === "development") {
     await setupVite(app, server);
   } else {

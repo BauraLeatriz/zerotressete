@@ -8,14 +8,16 @@ import Home from "./pages/Home";
 import Tech from "./pages/Tech";
 import Dev from "./pages/Dev";
 import Garage from "./pages/Garage";
+import Admin from "./pages/Admin";
+
 function Router() {
-  // make sure to consider if you need authentication for certain routes
   return (
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/tech" component={Tech} />
       <Route path="/dev" component={Dev} />
       <Route path="/garage" component={Garage} />
+      <Route path="/admin" component={Admin} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>
